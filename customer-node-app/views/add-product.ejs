@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <script>
+        const addProduct = async () => {
+            let name = document.getElementById('name').value;
+            let company = document.getElementById('company').value;
+            let code = document.getElementById('code').value;
+            let date = document.getElementById('date').value;
+            let city = document.getElementById('city').value;
+            let country = document.getElementById('country').value;
+
+            const data = { name, company, code, date, city, country };
+
+            const response = await fetch('/api/product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.log('Error:', error);
+                });
+
+            if (response.result == "Success") {
+                location = "/product"
+            }
+        }
+    </script>
+    <h1>
+        <%= title %>
+    </h1>
+    <input id="name" placeholder="Name" /> <br /><br />
+    <input id="company" placeholder="Company" /> <br /><br />
+    <input id="code" placeholder="Code" /> <br /><br />
+    <input id="date" placeholder="Date" type="date"/> <br /><br />
+    <input id="city" placeholder="City" /> <br /><br />
+    <input id="country" placeholder="Country" /> <br /><br />
+
+    <input type="button" onclick="addProduct()" value="Submit" /> <br />
+</body>
+
+</html>

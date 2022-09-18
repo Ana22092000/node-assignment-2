@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <script>
+        const updateProduct = async () => {
+            let id = document.getElementById('id').value;
+            let name = document.getElementById('name').value;
+            let company = document.getElementById('company').value;
+            let code = document.getElementById('code').value;
+            let date = document.getElementById('date').value;
+            let city = document.getElementById('city').value;
+            let country = document.getElementById('country').value;
+
+            const data = { id, name, company, code, date, city, country };
+
+            const response = await fetch('/api/product', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.log('Error:', error);
+                });
+
+            if (response.result == "Success") {
+                location = "/product"
+            }
+        }
+    </script>
+    <h1>
+        <%= title %>
+    </h1>
+    <input id="id" value='<%= record.id %>' readonly/> <br /><br />
+    <input id="name" placeholder="Name" value='<%= record.name %>' /> <br /><br />
+    <input id="company" placeholder="Company" value='<%= record.company %>' /> <br /><br />
+    <input id="code" placeholder="Code" value='<%= record.code %>' /> <br /><br />
+    <input id="date" placeholder="Date" value='<%= record.date %>' /> <br /><br />
+    <input id="city" placeholder="City" value='<%= record.city %>' /> <br /><br />
+    <input id="country" placeholder="Country" value='<%= record.country %>' /> <br /><br />
+
+    <input type="button" onclick="updateProduct()" value="Update" /> <br />
+</body>
+
+</html>

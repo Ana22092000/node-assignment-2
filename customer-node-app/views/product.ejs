@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+    <button onclick="location='/dashboard'"> Dashboard</button>&nbsp;|&nbsp;
+    <button onclick="location='/customer'"> Customer</button>&nbsp;|&nbsp;
+    <button onclick="location='/product'">Product</button>&nbsp;|&nbsp;
+    <button onclick="location='/about'"> About</button>&nbsp;|&nbsp;
+    <button onclick="location='/login'"> Logout</button>&nbsp;|&nbsp;
+    <hr />
+    <script>
+        const doEdit = (id) => {
+            location = '/product/edit/' + id;
+        }
+
+        const doDelete = async (id) => {
+            const response = await fetch('api/product', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id }), //destructure
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    return data;
+                })
+                .catch((error) => {
+                    console.log('Error:', error);
+                });
+
+            if (response.result == "Success") {
+                location = "/product"
+            }
+        }
+        const doSearch = function () {
+            var searchText = document.getElementById("searchText").value;
+            var selectField = document.getElementById("select").value;
+            if (searchText == "") {
+                location = "/product";
+            } else {
+                location = "/product/search/" + selectField + "/" + searchText;
+            }
+        }
+
+    </script>
+    <button onclick="location='/product/add'">Add</button>
+    <input id="searchText" type="text" name="" placeholder="search text">
+    <select id="select">
+        <option value="name">Name</option>
+        <option value="company">Company</option>
+        <option value="code">Code</option>
+        <option value="date">Date</option>
+        <option value="city">City</option>
+        <option value="country">Country</option>
+    </select>
+    <button onclick="doSearch()">Search</button><br /><br />
+
+
+    <div class="page-data">
+        <div class="data-table">
+            <table border="1" cellpadding="7" cellspacing="7">
+                <tr>
+                    <th width="20px">No</th>
+                    <th width="250px">Name</th>
+                    <th width="220px">Company</th>
+                    <th width="100px">Code</th>
+                    <th width="300px">Date</th>
+                    <th width="300px">City</th>
+                    <th width="300px">Country</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <% if(data.length){for(var i=0;i < data.length;i++) { %>
+                    <tr>
+                        <td>
+                            <%=data[i].id%>
+                        </td>
+                        <td>
+                            <%=data[i].name%>
+                        </td>
+                        <td>
+                            <%=data[i].company%>
+                        </td>
+                        <td>
+                            <%=data[i].code%>
+                        </td>
+                        <td>
+                            <%=data[i].date%>
+                        </td>
+                        <td>
+                            <%=data[i].city%>
+                        </td>
+                        <td>
+                            <%=data[i].country%>
+                        </td>
+                        <td><button onclick="doEdit('<%=data[i].id%>');">Edit</button></td>
+                        <td><button onclick="doDelete('<%=data[i].id %>');">Delete</button></td>
+                    </tr>
+                    <% } }else{ %>
+                        <tr>
+                            <td colspan="7">No product found</td>
+                        </tr>
+                        <% } %>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>
